@@ -4,34 +4,80 @@
 
 ## 1. Python Basics
 
+### JSON Handling
+
+#### Importing and Loading JSON Data
+
+```python
+import json
+
+# JSON string
+json_data = '{"name": "Alice", "age": 25, "city": "New York"}'
+
+# Convert JSON string to dictionary
+data = json.loads(json_data)
+```
+
+#### Writing and Reading JSON Files
+
+```python
+# Writing JSON to a file
+with open('data.json', 'w') as f:
+    json.dump(data, f, indent=4)
+
+# Reading JSON from a file
+with open('data.json', 'r') as f:
+    loaded_data = json.load(f)
+print(loaded_data)
+```
+
+### Requesting APIs
+
+#### Using the `requests` Library
+
+```python
+import requests
+
+# Making a GET request
+response = requests.get('https://test.com')
+
+# Converting response to JSON
+data = response.json()
+```
+
+#### Handling API Responses
+
+```python
+if response.status_code == 200:
+    print("Request was successful!")
+else:
+    print(f"Error: {response.status_code}")
+```
+
+#### Sending Data with POST Request
+
+```python
+payload = {"name": "Alice", "age": 25}
+headers = {'Content-Type': 'application/json'}
+response = requests.post('https://test.com/posts', json=payload, headers=headers)
+print(response.json())
+```
+
 ### List Comprehension
 
+#### Basic List Comprehension
+
 ```python
-squares = [x**2 for x in range(10)]  # [0, 1, 4, 9, ..., 81]
+numbers = [1, 2, 3, 4, 5]
+squared = [x**2 for x in numbers]
+print(squared)  # Output: [1, 4, 9, 16, 25]
 ```
 
-### Lambda Function
+#### Filtering with List Comprehension
 
 ```python
-add = lambda x, y: x + y
-print(add(3, 4))  # 7
-```
-
-### Dictionary Operations
-
-```python
-d = {'a': 1, 'b': 2}
-d['c'] = 3
-print(d.get('b'))  # 2
-```
-
-### Exception Handling
-
-```python
-try:
-    x = 10 / 0
-except ZeroDivisionError:
-    print("Cannot divide by zero")
+even_numbers = [x for x in numbers if x % 2 == 0]
+print(even_numbers)  # Output: [2, 4]
 ```
 
 <!-- ==========================================================================-->
@@ -95,6 +141,52 @@ df.loc[len(df)] = ['Charlie', 35]
 ```
 
 - `.loc` selects data by label (index/column name), while `.iloc` selects data by position (integer index)
+
+### Pivot Tables in Pandas
+
+#### Creating a Pivot Table
+
+```python
+import pandas as pd
+
+# Sample Data
+data = {
+    'Category': ['A', 'B', 'A', 'B', 'A', 'B'],
+    'SubCategory': ['X', 'X', 'Y', 'Y', 'X', 'Y'],
+    'Sales': [100, 200, 150, 300, 250, 400]
+}
+
+df = pd.DataFrame(data)
+
+# Creating a Pivot Table
+pivot_table = df.pivot_table(values='Sales', index='Category', columns='SubCategory', aggfunc='sum', fill_value=0)
+
+print(pivot_table)
+```
+
+#### Explanation
+
+- `values='Sales'`: Specifies which column's values to aggregate.
+- `index='Category'`: Rows are grouped by "Category."
+- `columns='SubCategory'`: Creates columns based on "SubCategory."
+- `aggfunc='sum'`: Aggregates using sum (you can use `mean`, `count`, etc.).
+- `fill_value=0`: Replaces NaN values with 0.
+
+#### Additional Aggregations
+
+```python
+# Using Multiple Aggregations
+pivot_table_multi = df.pivot_table(values='Sales', index='Category', columns='SubCategory', aggfunc=['sum', 'mean'], fill_value=0)
+
+print(pivot_table_multi)
+```
+
+#### Resetting Index
+
+```python
+pivot_table_reset = pivot_table.reset_index()
+print(pivot_table_reset)
+```
 
 ### Selecting and Filtering Data
 
@@ -162,9 +254,76 @@ df2 = pd.DataFrame({'ID': [1, 2], 'Age': [25, 30]})
 df_merged = pd.merge(df1, df2, on='ID')
 ```
 
+<!-- ========================================================================== -->
+
+## 3. Matplotlib
+
+### Basics
+
+#### Line Plot
+
+```python
+import matplotlib.pyplot as plt
+
+plt.plot(x, y)
+plt.show()
+```
+
+- Available chart options: `scatter`, `bar`, `hist`, `boxplot`, etc.
+
+#### Bar Chart
+
+```python
+plt.bar(categories, values)
+plt.show()
+```
+
+#### Histogram
+
+```python
+plt.hist(data, bins=10)
+plt.show()
+```
+
+### Customisation
+
+#### Adjusting Figure Size
+
+```python
+plt.figure(figsize=(10, 6))
+```
+
+#### Customizing Colors
+
+```python
+plt.plot(x, y, color='red')
+```
+
+- Available colors: `b` (blue), `g` (green), `r` (red), `c` (cyan), `m` (magenta), `y` (yellow), `k` (black), `w` (white).
+
+#### Modifying Axis Labels and Titles
+
+```python
+plt.xlabel('X-Axis Label')
+plt.ylabel('Y-Axis Label')
+plt.title('Plot Title')
+```
+
+#### Adding Grid Lines
+
+```python
+plt.grid(True)
+```
+
+#### Adding Legends
+
+```python
+plt.legend(['Series 1', 'Series 2'])
+```
+
 <!-- ==========================================================================-->
 
-## 3. Seaborn
+## 4. Seaborn
 
 ### Basics
 
@@ -225,7 +384,7 @@ plt.grid(True)
 
 <!-- ==========================================================================-->
 
-## 4. Plotly
+## 5. Plotly
 
 ### Basics
 
@@ -287,7 +446,7 @@ fig.update_yaxes(showgrid=True)
 
 <!-- ==========================================================================-->
 
-## 5. MongoDB
+## 6. MongoDB
 
 ### Connect to MongoDB
 
@@ -362,7 +521,7 @@ collection.delete_many({'age': {'$gt': 30}})
 
 <!-- ==========================================================================-->
 
-## 6. MySQL
+## 7. MySQL
 
 ### Connect to MySQL
 
@@ -494,7 +653,7 @@ RIGHT JOIN orders ON users.id = orders.user_id;
 
 <!-- ==========================================================================-->
 
-## 7. Firebase (firebase_admin)
+## 8. Firebase
 
 ### Initialize Firebase
 
